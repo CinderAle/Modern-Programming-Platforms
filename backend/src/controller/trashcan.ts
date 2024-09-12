@@ -4,6 +4,7 @@ import TrashcanService from '@/service/trashcan';
 import { HTTP_CODES } from '@/constants/httpCodes';
 import { TrashcanNotFoundError } from '@/error/trashcanNotFound';
 import { TrashcanDAO } from '@/dao/trashcan';
+import { GarbageTypes } from '@/types/garbageTypes';
 
 class TrashcanController implements IController {
     async create(req: Request, res: Response) {
@@ -50,10 +51,16 @@ class TrashcanController implements IController {
         }
     }
 
-    // For testing purposes
-    async getAll(req: Request, res: Response) {
+    async getByFilters(req: Request, res: Response) {
         try {
-            const result = await TrashcanDAO.find();
+            const { type, volumeMore, volumeLess, fillMore, fillLess } = req.query;
+            const result = await TrashcanService.getByFilters(
+                GarbageTypes[type as keyof typeof GarbageTypes],
+                Number(volumeMore),
+                Number(volumeLess),
+                Number(fillMore),
+                Number(fillLess)
+            );
             return res.json(result);
         } catch (e: any) {
             return res

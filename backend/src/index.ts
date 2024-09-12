@@ -11,7 +11,7 @@ app.use('/api', router);
 async function startApp() {
     try {
         await mongoose.connect('mongodb://localhost:27017/waste-into-city');
-        app.listen(PORT, () => console.log('Aboba'));
+        app.listen(PORT, () => console.log('Server is running'));
     } catch (e) {
         console.log(e);
     }
