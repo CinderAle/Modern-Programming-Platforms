@@ -7,13 +7,22 @@ export class Trashcan {
     private _type: GarbageTypes;
     private _volume: number;
     private _fill: number;
+    private _image: string;
 
-    constructor(id: string, coordinates: Coordinates, type: GarbageTypes, volume: number, fill: number = 0) {
+    constructor(
+        id: string,
+        coordinates: Coordinates,
+        type: GarbageTypes,
+        volume: number,
+        fill: number = 0,
+        image: string = ''
+    ) {
         this._id = id;
         this._coordinates = coordinates;
         this._type = type;
         this._volume = volume;
         this._fill = fill;
+        this._image = image;
     }
 
     get id() {
@@ -38,5 +47,9 @@ export class Trashcan {
 
     set fill(fill: number) {
         this._fill = fill;
+    }
+
+    get image() {
+        return this._image;
     }
 }

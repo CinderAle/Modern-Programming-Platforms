@@ -14,6 +14,7 @@ const TrashcanSchema = new Schema<Trashcan, TrashcanModel>({
     type: { type: String, enum: GarbageTypes, required: true },
     volume: { type: Number, required: true },
     fill: { type: Number },
+    image: { type: String, required: true },
 });
 
 export const TrashcanDAO = mongoose.model(MODELS.TRASHCAN, TrashcanSchema);

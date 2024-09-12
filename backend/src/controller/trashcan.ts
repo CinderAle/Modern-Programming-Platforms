@@ -3,13 +3,14 @@ import { IController } from './controller';
 import TrashcanService from '@/service/trashcan';
 import { HTTP_CODES } from '@/constants/httpCodes';
 import { TrashcanNotFoundError } from '@/error/trashcanNotFound';
-import { TrashcanDAO } from '@/dao/trashcan';
 import { GarbageTypes } from '@/types/garbageTypes';
+import { UploadedFile } from 'express-fileupload';
 
 class TrashcanController implements IController {
     async create(req: Request, res: Response) {
         try {
-            const result = await TrashcanService.create(req.body);
+            const image = req.files && req.files.image ? (req.files.image as UploadedFile) : null;
+            const result = await TrashcanService.create(req.body, image);
             return res.json(result);
         } catch (e: any) {
             return res.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json(e.message);

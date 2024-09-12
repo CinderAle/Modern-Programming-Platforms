@@ -1,14 +1,18 @@
-import { Trashcan } from '@/entity/trashcan';
 import { IService } from './service';
 import { GarbageTypes } from '@/types/garbageTypes';
 import { TrashcanDAO } from '@/dao/trashcan';
 import { TrashcanRequest } from '@/dto/trashcan/request';
 import { TrashcanNotFoundError } from '@/error/trashcanNotFound';
 import { TrashcanFilters } from '@/types/trashcanFilters';
+import { FileArray, UploadedFile } from 'express-fileupload';
+import FileService from './file';
+import { IMAGES } from '@/constants/images';
 
 class TrashcanService implements IService<TrashcanRequest> {
-    async create(entity: TrashcanRequest) {
-        return await TrashcanDAO.create(entity);
+    async create(entity: TrashcanRequest, file: UploadedFile | null) {
+        const image = file ? FileService.create(file) : IMAGES.NONE;
+        //console.log({ ...entity, image });
+        return await TrashcanDAO.create({ ...entity, image });
     }
     async getOne(id: string) {
         const trashcan = await TrashcanDAO.findById(id);
