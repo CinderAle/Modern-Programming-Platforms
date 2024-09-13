@@ -1,3 +1,4 @@
+import { IMAGES } from '@/constants/images';
 import { FileSavingError } from '@/error/fileSaving';
 import fileUpload from 'express-fileupload';
 import { unlinkSync } from 'fs';
@@ -18,7 +19,7 @@ class FileService {
 
     delete(filePath: string) {
         const fileName = path.basename(filePath);
-        unlinkSync(`@/../static/${fileName}`);
+        if (fileName !== IMAGES.NONE) unlinkSync(`@/../static/${fileName}`);
     }
 }
 

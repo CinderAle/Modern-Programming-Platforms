@@ -1,3 +1,3 @@
 export const IMAGES = {
-    NONE: 'A',
+    NONE: 'none.jpg',
 };

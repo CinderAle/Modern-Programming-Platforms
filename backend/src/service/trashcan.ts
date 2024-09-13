@@ -4,9 +4,10 @@ import { TrashcanDAO } from '@/dao/trashcan';
 import { TrashcanRequest } from '@/dto/trashcan/request';
 import { TrashcanNotFoundError } from '@/error/trashcanNotFound';
 import { TrashcanFilters } from '@/types/trashcanFilters';
-import { FileArray, UploadedFile } from 'express-fileupload';
+import { UploadedFile } from 'express-fileupload';
 import FileService from './file';
 import { IMAGES } from '@/constants/images';
+import { Trashcan } from '@/entity/trashcan';
 
 class TrashcanService implements IService<TrashcanRequest> {
     async create(entity: TrashcanRequest, file: UploadedFile | null) {
@@ -27,7 +28,10 @@ class TrashcanService implements IService<TrashcanRequest> {
     }
     async delete(id: string) {
         const trashcan = await TrashcanDAO.findByIdAndDelete(id);
-        if (trashcan) return trashcan;
+        if (trashcan) {
+            FileService.delete((trashcan as Trashcan).image);
+            return trashcan;
+        }
         throw new TrashcanNotFoundError();
     }
     async getByFilters(type: GarbageTypes, volumeMore: number, volumeLess: number, fillMore: number, fillLess: number) {

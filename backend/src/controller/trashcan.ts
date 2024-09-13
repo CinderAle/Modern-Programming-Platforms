@@ -11,7 +11,8 @@ class TrashcanController implements IController {
         try {
             const image = req.files && req.files.image ? (req.files.image as UploadedFile) : null;
             const result = await TrashcanService.create(req.body, image);
-            return res.json(result);
+            res.redirect('../api/trashcan');
+            //return res.json(result);
         } catch (e: any) {
             return res.status(HTTP_CODES.INTERNAL_SERVER_ERROR).json(e.message);
         }
@@ -21,7 +22,7 @@ class TrashcanController implements IController {
         try {
             const { id } = req.params;
             const result = await TrashcanService.getOne(id);
-            return res.json(result);
+            //return res.json(result);
         } catch (e: any) {
             return res
                 .status(e instanceof TrashcanNotFoundError ? HTTP_CODES.BAD_REQUEST : HTTP_CODES.INTERNAL_SERVER_ERROR)
@@ -32,7 +33,7 @@ class TrashcanController implements IController {
     async update(req: Request, res: Response) {
         try {
             const result = await TrashcanService.update(req.body);
-            return res.json(result);
+            //return res.json(result);
         } catch (e: any) {
             return res
                 .status(e instanceof TrashcanNotFoundError ? HTTP_CODES.BAD_REQUEST : HTTP_CODES.INTERNAL_SERVER_ERROR)
@@ -44,7 +45,8 @@ class TrashcanController implements IController {
         try {
             const { id } = req.params;
             const result = await TrashcanService.delete(id);
-            return res.json(result);
+            res.redirect('../trashcan');
+            //return res.json(result);
         } catch (e: any) {
             return res
                 .status(e instanceof TrashcanNotFoundError ? HTTP_CODES.BAD_REQUEST : HTTP_CODES.INTERNAL_SERVER_ERROR)
@@ -62,7 +64,8 @@ class TrashcanController implements IController {
                 Number(fillMore),
                 Number(fillLess)
             );
-            return res.json(result);
+            res.render('pages/index', { result });
+            //return res.json(result);
         } catch (e: any) {
             return res
                 .status(e instanceof TrashcanNotFoundError ? HTTP_CODES.BAD_REQUEST : HTTP_CODES.INTERNAL_SERVER_ERROR)

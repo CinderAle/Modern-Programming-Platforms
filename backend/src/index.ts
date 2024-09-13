@@ -2,6 +2,8 @@ import express, { Express, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import router from './router';
 import fileUpload from 'express-fileupload';
+import methodOverride from 'method-override';
+import bodyParser from 'body-parser';
 
 const PORT = 8080;
 const app: Express = express();
@@ -9,7 +11,14 @@ const app: Express = express();
 app.use(express.json());
 app.use(fileUpload({}));
 app.use(express.static('static'));
+app.use(methodOverride('_method'));
+app.use(
+    bodyParser.urlencoded({
+        extended: true,
+    })
+);
 app.use('/api', router);
+app.set('view engine', 'ejs');
 
 async function startApp() {
     try {
