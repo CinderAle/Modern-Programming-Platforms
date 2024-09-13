@@ -34,16 +34,15 @@
             <input type="submit" value="Find"/>
         </form>
         <% result.forEach(function (trashcan) { %>
-            <form method="POST" action="trashcan/<%= trashcan._id %>?_method=delete">
-                <h2><%= trashcan.type %></h2>
-                <p>Lat:<%= trashcan.coordinates.lat %> Lng:<%= trashcan.coordinates.lng %></p>
-                <p>Volume:<%= trashcan.volume %></p>
-                <P>Fill:<%= trashcan.fill %></P>
-                <p><%= trashcan.image %></p>
-                <img src="/<%= trashcan.image%>"/>
-                <input type="submit" value="Delete">
-                <input type="hidden" name="_method" value="DELETE">
-            </form>
+            <a href="trashcan/<%= trashcan._id %>">
+                <form method="POST" action="trashcan/<%= trashcan._id %>?_method=delete">
+                    <p>Lat:<%= trashcan.coordinates.lat %> Lng:<%= trashcan.coordinates.lng %></p>
+                    <p>Fill:<%= trashcan.fill %></p>
+                    <p><%= trashcan.type %></p>
+                    <input type="submit" value="Delete">
+                    <input type="hidden" name="_method" value="DELETE">
+                </form>
+            </a>
         <% }); %>
     </main>
     <footer>Footer</footer>

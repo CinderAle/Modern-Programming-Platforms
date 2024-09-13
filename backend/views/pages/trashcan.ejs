@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Into City</title>
+</head>
+<body>
+    <form method="POST" action="trashcan/<%= trashcan._id %>?_method=delete">
+        <img src="/<%= trashcan.image%>"/>
+        <p>Lat:<%= trashcan.coordinates.lat %> Lng:<%= trashcan.coordinates.lng %></p>
+        <p><%= trashcan.type %></p>
+        <p>Volume:<%= trashcan.volume %></p>
+        <P>Fill:<%= trashcan.fill %></P>
+        <input type="submit" value="Delete">
+    </form>
+</body>
+</html>

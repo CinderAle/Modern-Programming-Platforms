@@ -5,6 +5,7 @@ import { HTTP_CODES } from '@/constants/httpCodes';
 import { TrashcanNotFoundError } from '@/error/trashcanNotFound';
 import { GarbageTypes } from '@/types/garbageTypes';
 import { UploadedFile } from 'express-fileupload';
+import trashcan from '@/service/trashcan';
 
 class TrashcanController implements IController {
     async create(req: Request, res: Response) {
@@ -22,6 +23,7 @@ class TrashcanController implements IController {
         try {
             const { id } = req.params;
             const result = await TrashcanService.getOne(id);
+            res.render('pages/trashcan', { trashcan: result });
             //return res.json(result);
         } catch (e: any) {
             return res
