@@ -1,50 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waste Into City</title>
+    <%- include('../parts/head')%>
+    <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
-    <header>Header</header>
+    <%- include('../parts/header', {variant: false}) %>
     <main>
-        <form method="POST" enctype="multipart/form-data">
-            <label>Photo</label>
-            <input type="file" name="image"/>
-            <label>Lat:</label>
-            <input type="text" name="coordinates.lat" required/>
-            <label>Lng:</label>
-            <input type="text" name="coordinates.lng" required/>
-            <label>Volume:</label>
-            <input type="text" name="volume" required/>
-            <label>Fill:</label>
-            <input type="text" name="fill"/>
-            <label>Type:</label>
-            <select name="type" required>
-                <option>Common</option>
-                <option>Paper</option>
-                <option>Plastic</option>
-                <option>Recycle</option>
-                <option>Chemical</option>
-                <option>Glass</option>
-                <option>Metals</option>
-                <option>Green</option>
-                <option>Electronic</option>
-            </select>
-            <input type="submit" value="Find"/>
+        <div class="container">
+        <form method="POST" enctype="multipart/form-data" class="creator">
+            <label>
+                Photo 
+                <input type="file" name="image"/>
+            </label>
+            <label>
+                Lat:
+                <input type="text" name="coordinates.lat" required/>
+            </label>
+            <label>
+                Lng:
+                <input type="text" name="coordinates.lng" required/>
+            </label>
+            <label>
+                Volume:
+                <input type="text" name="volume" required/>
+            </label>
+            <label>
+                Fill:
+                <input type="text" name="fill"/>
+            </label>
+            <label>
+                Type:
+                <select name="type" required>
+                    <option>Common</option>
+                    <option>Paper</option>
+                    <option>Plastic</option>
+                    <option>Recycle</option>
+                    <option>Chemical</option>
+                    <option>Glass</option>
+                    <option>Metals</option>
+                    <option>Green</option>
+                    <option>Electronic</option>
+                </select>
+            </label>
+            <div class="button-block">
+                <button type="submit">Add</button>
+            </div>
         </form>
+        <div class="items">
         <% result.forEach(function (trashcan) { %>
-            <a href="trashcan/<%= trashcan._id %>">
+            <a href="trashcan/<%= trashcan._id %>" class="item">
                 <form method="POST" action="trashcan/<%= trashcan._id %>?_method=delete">
-                    <p>Lat:<%= trashcan.coordinates.lat %> Lng:<%= trashcan.coordinates.lng %></p>
-                    <p>Fill:<%= trashcan.fill %></p>
+                    <p><span>Lat:</span><%= trashcan.coordinates.lat %></p>
+                    <p><span>Lng:</span><%= trashcan.coordinates.lng %></p>
+                    <p><span>Fill:</span><%= trashcan.fill %></p>
                     <p><%= trashcan.type %></p>
-                    <input type="submit" value="Delete">
+                    <button type="submit">Delete</button>
                     <input type="hidden" name="_method" value="DELETE">
                 </form>
             </a>
         <% }); %>
+        </div>
+        </div>
     </main>
-    <footer>Footer</footer>
+    <%- include('../parts/footer') %>
 </body>
 </html>

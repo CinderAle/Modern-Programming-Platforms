@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waste Into City</title>
+    <%- include('../parts/head') %>
+    <link rel="stylesheet" href="/styles/trashcan.css">
 </head>
 <body>
-    <form method="POST" action="trashcan/<%= trashcan._id %>?_method=delete">
-        <img src="/<%= trashcan.image%>"/>
-        <p>Lat:<%= trashcan.coordinates.lat %> Lng:<%= trashcan.coordinates.lng %></p>
-        <p><%= trashcan.type %></p>
-        <p>Volume:<%= trashcan.volume %></p>
-        <P>Fill:<%= trashcan.fill %></P>
-        <input type="submit" value="Delete">
+    <%- include('../parts/header', {variant: true}) %>
+    <div class="container">
+        <form method="POST" action="<%= trashcan._id %>?_method=delete" class="trashcan">
+            <img src="/images/<%= trashcan.image%>"/>
+            <div class="text-block">
+                <p><span>Lat:</span><%= trashcan.coordinates.lat %></p>
+                <p><span>Lng:</span><%= trashcan.coordinates.lng %></p>
+                <p><span>Type:</span><%= trashcan.type %></p>
+                <p><span>Volume:</span><%= trashcan.volume %></p>
+                <p><span>Fill:</span><%= trashcan.fill %></p>
+                <button type="submit">Delete</button>
+            </div>
     </form>
+    </div>
+    <%- include('../parts/footer') %>
 </body>
 </html>

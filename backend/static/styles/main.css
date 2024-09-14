@@ -1,0 +1,121 @@
+.creator {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background-color: #288a5a;
+    padding: 30px 30px;
+    border-radius: 15px;
+}
+
+.creator label {
+    display: block;
+    color: #fff;
+    font-size: 32px;
+    width: 100px;
+}
+
+.creator label:first-child {
+    width: 100%;
+}
+
+.creator input[type="text"], select {
+    outline: none;
+    background-color: #333;
+    border: 2px solid #333;
+    color: #fff;
+    padding: 0 20px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 20px;
+    width: 100%;
+    transition: .3s linear;
+}
+
+.creator input[type="file"] {
+    width: 100%;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+.creator select {
+    cursor: pointer;
+}
+
+.creator label:nth-child(2), label:nth-child(3), label:nth-child(6) {
+    width: 200px;
+}
+
+.creator .button-block {
+    width: 100%;
+}
+
+.creator button {
+    width: 200px;
+    font-size: 32px;
+    outline: none;
+    border-radius: 25px;
+    display: block;
+    margin: 40px auto 20px;
+    background-color: #333;
+    color: #288a5a;
+    border: 2px solid #333;
+    padding: 5px 0 5px;
+    transition: .3s linear;
+    cursor: pointer;
+}
+
+.creator button:hover, button:focus {
+    border-color: #333;
+    background-color: #288a5a;
+    color: #fff;
+}
+
+.creator input[type="text"]:hover, input[type="text"]:focus, select:hover, select:focus {
+    border-color: #fff;
+}
+
+.items {
+    width: 100%;
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.item {
+    display: block;
+    width: 350px;
+    padding: 10px;
+    border: 2px solid #288a5a;
+    border-radius: 15px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.item p {
+    margin: 5px 0;
+}
+
+.item span {
+    color: #288a5a;
+}
+
+.item button {
+    width: 100%;
+    margin: 20px 0 10px;
+    padding: 5px 0;
+    background-color: #333;
+    border: 2px solid #288a5a;
+    font-size: 24px;
+    color: #288a5a;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: .3s linear;
+}
+
+.item button:hover {
+    border-color: #9c2828;
+    color: #9c2828;
+}

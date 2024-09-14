@@ -9,7 +9,7 @@ class FileService {
     create(file: fileUpload.UploadedFile) {
         try {
             const fileName = `${uuid.v4()}.jpg`;
-            const filePath = path.resolve('@/../static', fileName);
+            const filePath = path.resolve('@/../static/images', fileName);
             file.mv(filePath);
             return fileName;
         } catch (e: any) {
@@ -19,7 +19,7 @@ class FileService {
 
     delete(filePath: string) {
         const fileName = path.basename(filePath);
-        if (fileName !== IMAGES.NONE) unlinkSync(`@/../static/${fileName}`);
+        if (fileName !== IMAGES.NONE) unlinkSync(`@/../static/images/${fileName}`);
     }
 }
 
