@@ -1,0 +1,40 @@
+<div class="form-update">
+    <input type="hidden" name="id" value="<%= trashcan._id%>"/>
+    <div class="update-field">
+        <label>Photo</label> 
+        <input type="file" name="image"/>
+    </div>
+    <div class="update-field">
+        <label>Lat:</label>
+        <input type="text" name="coordinates.lat" value="<%= trashcan.coordinates.lat%>" required/>
+    </div>
+    <div class="update-field">
+        <label>Lng:</label>      
+        <input type="text" name="coordinates.lng" value="<%= trashcan.coordinates.lng%>" required/>
+    </div>
+    <div class="update-field">
+        <label>Volume:</label>
+        <input type="text" name="volume" value="<%= trashcan.volume%>" required/>
+    </div>
+    <div class="update-field">    
+        <label>Fill:</label>       
+        <input type="text" name="fill" value="<%= trashcan.fill%>"/>
+    </div>
+    <div class="update-field">   
+    <label>Type:</label>       
+        <select name="type" required>
+            <option>Common</option>
+            <option>Paper</option>
+            <option>Plastic</option>
+            <option>Recycle</option>
+            <option>Chemical</option>
+            <option>Glass</option>
+            <option>Metals</option>
+            <option>Green</option>
+            <option>Electronic</option>
+        </select>
+    </div>
+    <div class="button-block">
+        <button type="submit">Change</button>
+    </div>
+</div>

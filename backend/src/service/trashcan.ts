@@ -20,9 +20,10 @@ class TrashcanService implements IService<TrashcanRequest> {
         if (trashcan) return trashcan;
         throw new TrashcanNotFoundError();
     }
-    async update(entity: TrashcanRequest) {
+    async update(entity: TrashcanRequest, file: UploadedFile | null) {
         if (!entity.id) throw new TrashcanNotFoundError();
-        const trashcan = await TrashcanDAO.findByIdAndUpdate(entity.id, entity, { new: true });
+        const image = file ? FileService.create(file) : IMAGES.NONE;
+        const trashcan = await TrashcanDAO.findByIdAndUpdate(entity.id, { ...entity, image }, { new: true });
         if (trashcan) return trashcan;
         throw new TrashcanNotFoundError();
     }

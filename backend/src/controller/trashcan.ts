@@ -6,6 +6,8 @@ import { TrashcanNotFoundError } from '@/error/trashcanNotFound';
 import { GarbageTypes } from '@/types/garbageTypes';
 import { UploadedFile } from 'express-fileupload';
 import trashcan from '@/service/trashcan';
+import { resourceLimits } from 'worker_threads';
+import { Trashcan } from '@/entity/trashcan';
 
 class TrashcanController implements IController {
     async create(req: Request, res: Response) {
@@ -22,8 +24,9 @@ class TrashcanController implements IController {
     async get(req: Request, res: Response) {
         try {
             const { id } = req.params;
+            const { update } = req.query;
             const result = await TrashcanService.getOne(id);
-            res.render('pages/trashcan', { trashcan: result });
+            res.render('pages/trashcan', { trashcan: result, update });
             //return res.json(result);
         } catch (e: any) {
             return res
@@ -34,7 +37,10 @@ class TrashcanController implements IController {
 
     async update(req: Request, res: Response) {
         try {
-            const result = await TrashcanService.update(req.body);
+            const image = req.files && req.files.image ? (req.files.image as UploadedFile) : null;
+            const result = (await TrashcanService.update(req.body, image)) as Trashcan;
+            //res.render(`pages/trashcan`, { trashcan: result, update: false });
+            res.redirect('trashcan/' + result.id);
             //return res.json(result);
         } catch (e: any) {
             return res
@@ -66,7 +72,7 @@ class TrashcanController implements IController {
                 Number(fillMore),
                 Number(fillLess)
             );
-            res.render('pages/index', { result });
+            res.render('pages/index', { result, filters: { type, volumeMore, volumeLess, fillMore, fillLess } });
             //return res.json(result);
         } catch (e: any) {
             return res

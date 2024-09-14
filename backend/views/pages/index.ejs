@@ -3,6 +3,7 @@
 <head>
     <%- include('../parts/head')%>
     <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/filters.css">
 </head>
 <body>
     <%- include('../parts/header', {variant: false}) %>
@@ -45,6 +46,31 @@
             </label>
             <div class="button-block">
                 <button type="submit">Add</button>
+            </div>
+        </form>
+        <form method="GET" class="filters" action="">
+            <div class="filter-items">
+                <div class="filter-item">
+                    <label>Volume more than</label>
+                    <input type="text" placeholder="0" name="volumeMore" value="<%= filters.volumeMore %>">
+                </div>
+                <div class="filter-item">
+                    <label>Volume less than</label>
+                    <input type="text" placeholder="100" name="volumeLess" value="<%= filters.volumeLess %>"/>
+                </div>
+            </div>
+            <div class="filter-items">
+                <div class="filter-item">
+                    <label>Fill more than</label>
+                    <input type="text" placeholder="0" name="fillMore" value="<%= filters.fillMore %>"/>
+                </div>
+                <div class="filter-item">
+                    <label>Fill less than</label>
+                    <input type="text" placeholder="1" name="fillLess" value="<%= filters.fillLess %>"/>
+                </div>
+            </div>
+            <div class="button-block">
+                <button type="submit">Apply</button>
             </div>
         </form>
         <div class="items">

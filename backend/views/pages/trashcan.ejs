@@ -7,15 +7,30 @@
 <body>
     <%- include('../parts/header', {variant: true}) %>
     <div class="container">
-        <form method="POST" action="<%= trashcan._id %>?_method=delete" class="trashcan">
+        <% if(update) { %>
+            <form method="POST" action="/api/trashcan?_method=put" class="trashcan" enctype="multipart/form-data">
+        <% } else { %>
+            <form method="POST" action="<%= trashcan._id %>?_method=delete" class="trashcan">
+        <% } %>
             <img src="/images/<%= trashcan.image%>"/>
             <div class="text-block">
-                <p><span>Lat:</span><%= trashcan.coordinates.lat %></p>
-                <p><span>Lng:</span><%= trashcan.coordinates.lng %></p>
-                <p><span>Type:</span><%= trashcan.type %></p>
-                <p><span>Volume:</span><%= trashcan.volume %></p>
-                <p><span>Fill:</span><%= trashcan.fill %></p>
-                <button type="submit">Delete</button>
+                <% if(update) {%>
+                    <%- include('../parts/trashcan-update') %>
+                <% } else { %>
+                        <p><span>Lat:</span><%= trashcan.coordinates.lat %></p>
+                        <p><span>Lng:</span><%= trashcan.coordinates.lng %></p>
+                        <p><span>Type:</span><%= trashcan.type %></p>
+                        <p><span>Volume:</span><%= trashcan.volume %></p>
+                        <p><span>Fill:</span><%= trashcan.fill %></p>
+                <% } %>
+                <div class="buttons">
+                    <% if(update) { %>
+                        <a href="?">Cancel</a>
+                    <% } else {%>
+                        <a href="?update=true">Update</a>
+                        <button type="submit">Delete</button>
+                    <% } %>
+                </div>
             </div>
     </form>
     </div>
