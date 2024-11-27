@@ -11,7 +11,7 @@ class FileService {
             const fileName = `${uuid.v4()}.jpg`;
             const filePath = path.resolve('@/../static/images', fileName);
             file.mv(filePath);
-            return fileName;
+            return `http://localhost:8080/images/${fileName}`;
         } catch (e: any) {
             throw new FileSavingError(e.message);
         }

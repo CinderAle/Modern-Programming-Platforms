@@ -4,10 +4,12 @@ import router from './router';
 import fileUpload from 'express-fileupload';
 import methodOverride from 'method-override';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 const PORT = 8080;
 const app: Express = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(fileUpload({}));
 app.use(express.static('static'));

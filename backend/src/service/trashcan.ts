@@ -11,8 +11,7 @@ import { Trashcan } from '@/entity/trashcan';
 
 class TrashcanService implements IService<TrashcanRequest> {
     async create(entity: TrashcanRequest, file: UploadedFile | null) {
-        const image = file ? FileService.create(file) : IMAGES.NONE;
-        //console.log({ ...entity, image });
+        const image = file ? FileService.create(file) : `http://localhost:8080/images/${IMAGES.NONE}`;
         return await TrashcanDAO.create({ ...entity, image });
     }
     async getOne(id: string) {
