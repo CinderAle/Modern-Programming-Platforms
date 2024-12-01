@@ -7,7 +7,13 @@ type AccessTokenModel = Model<Token>;
 
 const AccessTokenSchema = new Schema<Token, AccessTokenModel>({
     active: { type: Boolean, required: true },
-    token: { type: String, required: true },
+    token: {
+        type: String,
+        required: true,
+        index: {
+            unique: true,
+        },
+    },
 });
 
 export const AccessTokenDAO = mongoose.model(MODELS.ACCESS_TOKEN, AccessTokenSchema);

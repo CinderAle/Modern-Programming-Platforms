@@ -52,10 +52,12 @@ class AuthController implements IController {
 
     async delete(req: Request, res: Response) {
         try {
+            const refreshToken = req.cookies[process.env.REFRESH_TOKEN_COOKIE_NAME as string];
+            const accessToken = req.cookies[process.env.ACCESS_TOKEN_COOKIE_NAME as string];
+            await AuthService.signOut(refreshToken, accessToken);
+            return res.status(HTTP_CODES.SUCCESS);
         } catch (e: unknown) {
-            return res
-                .status(e instanceof AuthorizationError ? HTTP_CODES.UNAUTHORIZED : HTTP_CODES.BAD_REQUEST)
-                .json((e as Error).message);
+            return res.status(HTTP_CODES.BAD_REQUEST).json((e as Error).message);
         }
     }
 }

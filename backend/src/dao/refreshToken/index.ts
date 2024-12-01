@@ -7,7 +7,13 @@ type RefreshTokenModel = Model<Token>;
 
 const RefreshTokenSchema = new Schema<Token, RefreshTokenModel>({
     active: { type: Boolean, required: true },
-    token: { type: String, required: true },
+    token: {
+        type: String,
+        required: true,
+        index: {
+            unique: true,
+        },
+    },
 });
 
 export const RefreshTokenDAO = mongoose.model(MODELS.REFRESH_TOKEN, RefreshTokenSchema);

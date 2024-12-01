@@ -12,15 +12,18 @@ import { InvalidTokenError } from '@/error/invalidTokenError';
 
 class AuthService {
     async signUp(user: Readonly<UserRequest>): Promise<void> {
-        const currentUser = await UserDAO.find({
+        const currentUser = await UserDAO.findOne({
             login: { $eq: user.login },
         });
 
-        if (currentUser.length) {
+        if (currentUser) {
             throw new AuthorizationError();
         }
 
-        await UserDAO.create(user);
+        await UserDAO.create({
+            ...user,
+            role: UserRoles.USER,
+        });
     }
 
     async signIn({ login, password }: UserRequest): Promise<Readonly<[string, string, UserResponse]>> {
@@ -90,6 +93,11 @@ class AuthService {
         await this.validateAccessToken(accessToken);
         const user: UserResponse = jwt.decode(accessToken) as UserResponse;
         return user.role;
+    }
+
+    async signOut(refreshToken: string, accessToken: string): Promise<void> {
+        await RefreshTokenDAO.findOneAndUpdate({ token: { $eq: refreshToken } }, { active: false });
+        await AccessTokenDAO.findOneAndUpdate({ token: { $eq: accessToken } }, { active: false });
     }
 }
 

@@ -14,5 +14,6 @@ router.get(`${ROUTES.TRASHCAN}/delete/:id`, TrashcanController.delete);
 router.post(`${ROUTES.AUTH}/signup`, AuthController.create);
 router.post(`${ROUTES.AUTH}`, AuthController.get);
 router.put(`${ROUTES.AUTH}`, AuthController.update);
+router.delete(`${ROUTES.AUTH}`, AuthController.delete);
 
 export default router;

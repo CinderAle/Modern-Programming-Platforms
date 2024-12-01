@@ -6,9 +6,15 @@ import mongoose, { Model, Schema } from 'mongoose';
 type UserModel = Model<User>;
 
 const UserSchema = new Schema<User, UserModel>({
-    id: { type: String, required: true },
+    id: { type: String, index: true },
     role: { type: String, enum: UserRoles, required: true },
-    login: { type: String, required: true },
+    login: {
+        type: String,
+        required: true,
+        index: {
+            unique: true,
+        },
+    },
     password: { type: String, required: true },
 });
 
