@@ -9,7 +9,7 @@ import FileService from './file';
 import { IMAGES } from '@/constants/images';
 import { Trashcan } from '@/entity/trashcan';
 
-class TrashcanService implements IService<TrashcanRequest> {
+class TrashcanService implements IService<TrashcanRequest, Trashcan> {
     async create(entity: TrashcanRequest, file: UploadedFile | null) {
         const image = file ? FileService.create(file) : `http://localhost:8080/images/${IMAGES.NONE}`;
         return await TrashcanDAO.create({ ...entity, image });
