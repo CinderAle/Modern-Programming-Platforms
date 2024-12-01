@@ -4,6 +4,7 @@ import { AuthorizationError } from '@/error/authorizationError';
 import { HTTP_CODES } from '@/constants/httpCodes';
 import AuthService from '@/service/auth';
 import { UserRequest } from '@/dto/user/request';
+import { InvalidTokenError } from '@/error/invalidTokenError';
 
 class AuthController implements IController {
     async create(req: Request, res: Response) {
@@ -13,7 +14,7 @@ class AuthController implements IController {
             return res.status(HTTP_CODES.SUCCESS);
         } catch (e: unknown) {
             return res
-                .status(e instanceof AuthorizationError ? HTTP_CODES.BAD_REQUEST : HTTP_CODES.INTERNAL_SERVER_ERROR)
+                .status(e instanceof AuthorizationError ? HTTP_CODES.UNAUTHORIZED : HTTP_CODES.BAD_REQUEST)
                 .json((e as Error).message);
         }
     }
@@ -29,7 +30,7 @@ class AuthController implements IController {
                 .json(user);
         } catch (e: unknown) {
             return res
-                .status(e instanceof AuthorizationError ? HTTP_CODES.BAD_REQUEST : HTTP_CODES.INTERNAL_SERVER_ERROR)
+                .status(e instanceof AuthorizationError ? HTTP_CODES.UNAUTHORIZED : HTTP_CODES.BAD_REQUEST)
                 .json((e as Error).message);
         }
     }
@@ -44,7 +45,7 @@ class AuthController implements IController {
                 .status(HTTP_CODES.SUCCESS);
         } catch (e: unknown) {
             return res
-                .status(e instanceof AuthorizationError ? HTTP_CODES.BAD_REQUEST : HTTP_CODES.INTERNAL_SERVER_ERROR)
+                .status(e instanceof InvalidTokenError ? HTTP_CODES.INVALID_TOKEN : HTTP_CODES.BAD_REQUEST)
                 .json((e as Error).message);
         }
     }
@@ -53,8 +54,10 @@ class AuthController implements IController {
         try {
         } catch (e: unknown) {
             return res
-                .status(e instanceof AuthorizationError ? HTTP_CODES.BAD_REQUEST : HTTP_CODES.INTERNAL_SERVER_ERROR)
+                .status(e instanceof AuthorizationError ? HTTP_CODES.UNAUTHORIZED : HTTP_CODES.BAD_REQUEST)
                 .json((e as Error).message);
         }
     }
 }
+
+export default new AuthController();

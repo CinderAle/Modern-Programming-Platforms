@@ -6,6 +6,7 @@ import methodOverride from 'method-override';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const app: Express = express();
 app.use(cors());
 app.use(express.json());
 app.use(fileUpload({}));
+app.use(cookieParser());
 app.use(express.static('static'));
 app.use(methodOverride('_method'));
 app.use(

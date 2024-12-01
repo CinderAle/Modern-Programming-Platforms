@@ -8,9 +8,17 @@ import { UploadedFile } from 'express-fileupload';
 import FileService from './file';
 import { IMAGES } from '@/constants/images';
 import { Trashcan } from '@/entity/trashcan';
+import AuthService from '@/service/auth';
+import { UserRoles } from '@/types/userRoles';
+import { AuthorizationError } from '@/error/authorizationError';
 
 class TrashcanService implements IService<TrashcanRequest, Trashcan> {
-    async create(entity: TrashcanRequest, file: UploadedFile | null) {
+    async create(entity: TrashcanRequest, file: UploadedFile | null, accessToken: string) {
+        const role = await AuthService.getUserRole(accessToken);
+        if (role !== UserRoles.ADMIN) {
+            throw new AuthorizationError();
+        }
+
         const image = file ? FileService.create(file) : `http://localhost:8080/images/${IMAGES.NONE}`;
         return await TrashcanDAO.create({ ...entity, image });
     }
@@ -19,14 +27,24 @@ class TrashcanService implements IService<TrashcanRequest, Trashcan> {
         if (trashcan) return trashcan;
         throw new TrashcanNotFoundError();
     }
-    async update(entity: TrashcanRequest, file: UploadedFile | null) {
+    async update(entity: TrashcanRequest, file: UploadedFile | null, accessToken: string) {
+        const role = await AuthService.getUserRole(accessToken);
+        if (role !== UserRoles.ADMIN) {
+            throw new AuthorizationError();
+        }
+
         if (!entity.id) throw new TrashcanNotFoundError();
         const image = file ? FileService.create(file) : IMAGES.NONE;
         const trashcan = await TrashcanDAO.findByIdAndUpdate(entity.id, { ...entity, image }, { new: true });
         if (trashcan) return trashcan;
         throw new TrashcanNotFoundError();
     }
-    async delete(id: string) {
+    async delete(id: string, accessToken: string) {
+        const role = await AuthService.getUserRole(accessToken);
+        if (role !== UserRoles.ADMIN) {
+            throw new AuthorizationError();
+        }
+
         const trashcan = await TrashcanDAO.findByIdAndDelete(id);
         if (trashcan) {
             FileService.delete((trashcan as Trashcan).image);
