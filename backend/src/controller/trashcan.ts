@@ -12,6 +12,7 @@ class TrashcanController implements IController {
     async create(req: Request, res: Response) {
         try {
             const image = req.files && req.files.image ? (req.files.image as UploadedFile) : null;
+            console.log(req.cookies, req.signedCookies);
             const accessToken = req.cookies[process.env.ACCESS_TOKEN_COOKIE_NAME as string];
             const result = await TrashcanService.create(req.body, image, accessToken);
             //res.redirect('../api/trashcan');

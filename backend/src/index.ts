@@ -12,11 +12,23 @@ dotenv.config();
 
 const PORT = Number(process.env.PORT);
 const app: Express = express();
+const ALLOWED_ORIGINS = ['http://localhost:5173'];
 
-app.use(cors());
+app.use(cookieParser());
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed bu CORS!'));
+            }
+        },
+        credentials: true,
+    })
+);
 app.use(express.json());
 app.use(fileUpload({}));
-app.use(cookieParser());
 app.use(express.static('static'));
 app.use(methodOverride('_method'));
 app.use(

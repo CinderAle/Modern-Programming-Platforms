@@ -37,7 +37,6 @@ class AuthService {
         }
 
         const userResponse: UserResponse = { login: currentUser.login, role: currentUser.role };
-
         const refreshToken = await RefreshTokenDAO.create({ active: true, token: generateRefreshToken(userResponse) });
         const accessToken = await AccessTokenDAO.create({ active: true, token: generateAccesToken(userResponse) });
 
