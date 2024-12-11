@@ -7,6 +7,10 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import { Server } from 'socket.io';
+import { SOCKET_MESSAGES } from './constants/socketMessages';
+import http from 'http';
+import { socketConnectedListener } from './sockets';
 
 dotenv.config();
 
@@ -39,10 +43,25 @@ app.use(
 app.use('/api', router);
 app.set('view engine', 'ejs');
 
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: (origin, callback) => {
+            if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS!'));
+            }
+        },
+        credentials: true,
+    },
+});
+io.on(SOCKET_MESSAGES.CONNECTION, socketConnectedListener);
+
 async function startApp() {
     try {
         await mongoose.connect('mongodb://localhost:27017/waste-into-city');
-        app.listen(PORT, () => console.log('Server is running'));
+        server.listen(PORT, () => console.log('Server is running'));
     } catch (e) {
         console.log(e);
     }

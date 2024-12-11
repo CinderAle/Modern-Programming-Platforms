@@ -7,3 +7,11 @@ export interface IController {
     update(req: Request, res: Response): void;
     delete(req: Request, res: Response): void;
 }
+
+export interface ISocketController {
+    create(): void;
+    get(): void;
+    getAll?(): void;
+    update(): void;
+    delete(): void;
+}

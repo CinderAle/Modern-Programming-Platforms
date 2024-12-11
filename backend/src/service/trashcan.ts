@@ -13,12 +13,11 @@ import { UserRoles } from '@/types/userRoles';
 import { AuthorizationError } from '@/error/authorizationError';
 
 class TrashcanService implements IService<TrashcanRequest, Trashcan> {
-    async create(entity: TrashcanRequest, file: UploadedFile | null, accessToken: string) {
+    async create(entity: TrashcanRequest, file: ArrayBuffer | null, accessToken: string) {
         const role = await AuthService.getUserRole(accessToken);
         if (role !== UserRoles.ADMIN) {
             throw new AuthorizationError();
         }
-
         const image = file ? FileService.create(file) : `http://localhost:8080/images/${IMAGES.NONE}`;
         return await TrashcanDAO.create({ ...entity, image });
     }
@@ -27,7 +26,7 @@ class TrashcanService implements IService<TrashcanRequest, Trashcan> {
         if (trashcan) return trashcan;
         throw new TrashcanNotFoundError();
     }
-    async update(entity: TrashcanRequest, file: UploadedFile | null, accessToken: string) {
+    async update(entity: TrashcanRequest, file: ArrayBuffer | null, accessToken: string) {
         const role = await AuthService.getUserRole(accessToken);
         if (role !== UserRoles.ADMIN) {
             throw new AuthorizationError();
@@ -52,7 +51,13 @@ class TrashcanService implements IService<TrashcanRequest, Trashcan> {
         }
         throw new TrashcanNotFoundError();
     }
-    async getByFilters(type: GarbageTypes, volumeMore: number, volumeLess: number, fillMore: number, fillLess: number) {
+    async getByFilters(
+        type?: GarbageTypes,
+        volumeMore?: number,
+        volumeLess?: number,
+        fillMore?: number,
+        fillLess?: number
+    ) {
         const filters: TrashcanFilters = {
             ...(type && { type }),
             ...((volumeMore || volumeLess) && {

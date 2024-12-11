@@ -7,6 +7,6 @@ export const appendRefreshTokenCookie = (res: Response, token: string) => {
         secure: false,
         sameSite: 'strict',
         maxAge: Number(process.env['REFRESH_TOKEN_MAX_AGE']) * 1000,
-        path: `api${ROUTES.AUTH}`,
+        //path: `api${ROUTES.AUTH}`,
     });
 };

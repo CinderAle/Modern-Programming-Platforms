@@ -14,9 +14,9 @@ class TrashcanController implements IController {
             const image = req.files && req.files.image ? (req.files.image as UploadedFile) : null;
             console.log(req.cookies, req.signedCookies);
             const accessToken = req.cookies[process.env.ACCESS_TOKEN_COOKIE_NAME as string];
-            const result = await TrashcanService.create(req.body, image, accessToken);
-            //res.redirect('../api/trashcan');
-            return res.json(result);
+            // const result = await TrashcanService.create(req.body, image, accessToken);
+            // //res.redirect('../api/trashcan');
+            // return res.json(result);
         } catch (e: unknown) {
             return res
                 .status(e instanceof AuthorizationError ? HTTP_CODES.UNAUTHORIZED : HTTP_CODES.INTERNAL_SERVER_ERROR)
@@ -45,10 +45,10 @@ class TrashcanController implements IController {
         try {
             const image = req.files && req.files.image ? (req.files.image as UploadedFile) : null;
             const accessToken = req.cookies[process.env.ACCESS_TOKEN_COOKIE_NAME as string];
-            const result = (await TrashcanService.update(req.body, image, accessToken)) as Trashcan;
-            //res.render(`pages/trashcan`, { trashcan: result, update: false });
-            //res.redirect('trashcan/' + result.id);
-            return res.json(result);
+            // const result = (await TrashcanService.update(req.body, image, accessToken)) as Trashcan;
+            // //res.render(`pages/trashcan`, { trashcan: result, update: false });
+            // //res.redirect('trashcan/' + result.id);
+            // return res.json(result);
         } catch (e: any) {
             if (e instanceof TrashcanNotFoundError) {
                 res = res.status(HTTP_CODES.BAD_REQUEST);
