@@ -68,7 +68,7 @@ const io = new Server(server, {
         credentials: true,
     },
 });
-io.on(SOCKET_MESSAGES.CONNECTION, socketConnectedListener);
+io.on(SOCKET_MESSAGES.CONNECTION, socketConnectedListener(io));
 
 async function startApp() {
     try {

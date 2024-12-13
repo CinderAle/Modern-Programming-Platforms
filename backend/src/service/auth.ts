@@ -98,6 +98,14 @@ class AuthService {
         await RefreshTokenDAO.findOneAndUpdate({ token: { $eq: refreshToken } }, { active: false });
         await AccessTokenDAO.findOneAndUpdate({ token: { $eq: accessToken } }, { active: false });
     }
+
+    async checkRefreshToken(refreshToken: string | undefined): Promise<boolean> {
+        if (!refreshToken) {
+            return false;
+        }
+        const dbRefreshToken = await RefreshTokenDAO.findOne({ token: { $eq: refreshToken } });
+        return Boolean(dbRefreshToken?.active);
+    }
 }
 
 export default new AuthService();

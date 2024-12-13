@@ -1,12 +1,11 @@
 import { SOCKET_MESSAGES } from '@/constants/socketMessages';
 import { TrashcanRequest } from '@/dto/trashcan/request';
-import { UploadedFile } from 'express-fileupload';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import TrashcanService from '@/service/trashcan';
 import { AuthorizationError } from '@/error/authorizationError';
 import { TrashcanFilters } from '@/types/trashcanFilters';
 
-export const socketConnectedListener = (socket: Socket) => {
+export const socketConnectedListener = (io: Server) => (socket: Socket) => {
     const accessToken: string =
         socket.request.headers.cookie
             ?.split('; ')
@@ -16,7 +15,7 @@ export const socketConnectedListener = (socket: Socket) => {
     socket.on(SOCKET_MESSAGES.CREATE_TRASHCAN, async (trashcan: TrashcanRequest, image: ArrayBuffer | null) => {
         try {
             const result = await TrashcanService.create(trashcan, image, accessToken);
-            socket.emit(SOCKET_MESSAGES.SUCCESS, result);
+            io.emit(SOCKET_MESSAGES.ADDED_TRASHCAN, result);
         } catch (e: unknown) {
             socket.emit(
                 e instanceof AuthorizationError ? SOCKET_MESSAGES.AUTH_ERROR : SOCKET_MESSAGES.ERROR,
@@ -38,7 +37,7 @@ export const socketConnectedListener = (socket: Socket) => {
     socket.on(SOCKET_MESSAGES.UPDATE_TRASHCAN, async (trashcan: TrashcanRequest, image: ArrayBuffer | null) => {
         try {
             const result = await TrashcanService.update(trashcan, image, accessToken);
-            socket.emit(SOCKET_MESSAGES.UPDATE_TRASHCAN, result);
+            io.emit(SOCKET_MESSAGES.MODIFIED_TRASHCAN, result);
         } catch (e: unknown) {
             socket.emit(
                 e instanceof AuthorizationError ? SOCKET_MESSAGES.AUTH_ERROR : SOCKET_MESSAGES.ERROR,
@@ -49,7 +48,7 @@ export const socketConnectedListener = (socket: Socket) => {
     socket.on(SOCKET_MESSAGES.DELETE_TRASHCAN, async (id: string) => {
         try {
             const result = await TrashcanService.delete(id, accessToken);
-            socket.emit(SOCKET_MESSAGES.UPDATE_TRASHCAN, result);
+            io.emit(SOCKET_MESSAGES.REMOVED_TRASHCAN, result);
         } catch (e: unknown) {
             socket.emit(
                 e instanceof AuthorizationError ? SOCKET_MESSAGES.AUTH_ERROR : SOCKET_MESSAGES.ERROR,
@@ -66,7 +65,7 @@ export const socketConnectedListener = (socket: Socket) => {
                 filter?.fill?.$gt,
                 filter?.fill?.$lt
             );
-            socket.emit(SOCKET_MESSAGES.SUCCESS, result);
+            socket.emit(SOCKET_MESSAGES.LIST_TRASHCANS, result);
         } catch (e: unknown) {
             socket.emit(
                 e instanceof AuthorizationError ? SOCKET_MESSAGES.AUTH_ERROR : SOCKET_MESSAGES.ERROR,

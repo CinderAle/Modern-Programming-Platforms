@@ -56,4 +56,11 @@ export const authResolver = {
             return true;
         }
     },
+
+    checkToken: async (_: any, { req }: Context) => {
+        const isActual = await AuthService.checkRefreshToken(
+            req.cookies[process.env.REFRESH_TOKEN_COOKIE_NAME as string]
+        );
+        return isActual;
+    },
 };

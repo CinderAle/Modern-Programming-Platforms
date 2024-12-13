@@ -14,6 +14,7 @@ export const rootSchema = buildSchema(`
     type Query {
         updateToken: Boolean
         logOut: Boolean
+        checkToken: Boolean
     }
 
     type Mutation {
