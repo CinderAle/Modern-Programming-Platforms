@@ -11,12 +11,15 @@ import { Server } from 'socket.io';
 import { SOCKET_MESSAGES } from './constants/socketMessages';
 import http from 'http';
 import { socketConnectedListener } from './sockets';
+import { graphqlHTTP } from 'express-graphql';
+import { rootSchema } from './graphql/schemas';
+import { rootResolver } from './graphql/resolvers';
 
 dotenv.config();
 
 const PORT = Number(process.env.PORT);
 const app: Express = express();
-const ALLOWED_ORIGINS = ['http://localhost:5173'];
+const ALLOWED_ORIGINS = ['http://localhost:5173', 'http://localhost:8080'];
 
 app.use(cookieParser());
 app.use(
@@ -42,6 +45,15 @@ app.use(
 );
 app.use('/api', router);
 app.set('view engine', 'ejs');
+app.use(
+    '/graphql',
+    graphqlHTTP((req, res) => ({
+        schema: rootSchema,
+        graphiql: true,
+        context: { req, res },
+        rootValue: rootResolver,
+    }))
+);
 
 const server = http.createServer(app);
 const io = new Server(server, {
