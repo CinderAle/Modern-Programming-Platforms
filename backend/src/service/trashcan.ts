@@ -11,10 +11,13 @@ import { Trashcan } from '@/entity/trashcan';
 import AuthService from '@/service/auth';
 import { UserRoles } from '@/types/userRoles';
 import { AuthorizationError } from '@/error/authorizationError';
+import { validateTrashcan, validateTrashcanFilter } from '@/utils/validators';
+import { InvalidEntityError } from '@/error/invalidEntityError';
 
 class TrashcanService implements IService<TrashcanRequest, Trashcan> {
     async create(entity: TrashcanRequest, file: ArrayBuffer | null, accessToken: string) {
         const role = await AuthService.getUserRole(accessToken);
+        if (!validateTrashcan(entity)) throw new InvalidEntityError();
         if (role !== UserRoles.ADMIN) {
             throw new AuthorizationError();
         }
@@ -33,6 +36,7 @@ class TrashcanService implements IService<TrashcanRequest, Trashcan> {
         }
 
         if (!entity.id) throw new TrashcanNotFoundError();
+        if (!validateTrashcan(entity)) throw new InvalidEntityError();
         const image = file ? FileService.create(file) : IMAGES.NONE;
         const trashcan = await TrashcanDAO.findByIdAndUpdate(entity.id, { ...entity, image }, { new: true });
         if (trashcan) return trashcan;
@@ -52,13 +56,13 @@ class TrashcanService implements IService<TrashcanRequest, Trashcan> {
         throw new TrashcanNotFoundError();
     }
     async getByFilters(
-        type?: GarbageTypes,
+        type?: GarbageTypes[],
         volumeMore?: number,
         volumeLess?: number,
         fillMore?: number,
         fillLess?: number
     ) {
-        const filters: TrashcanFilters = {
+        const filter: TrashcanFilters = {
             ...(type && { type }),
             ...((volumeMore || volumeLess) && {
                 volume: {
@@ -73,8 +77,8 @@ class TrashcanService implements IService<TrashcanRequest, Trashcan> {
                 },
             }),
         };
-
-        const trashcans = await TrashcanDAO.find(filters);
+        if (!validateTrashcanFilter(filter)) throw new InvalidEntityError();
+        const trashcans = await TrashcanDAO.find(filter);
         return trashcans;
     }
 }
