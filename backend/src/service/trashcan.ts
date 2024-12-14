@@ -31,14 +31,18 @@ class TrashcanService implements IService<TrashcanRequest, Trashcan> {
     }
     async update(entity: TrashcanRequest, file: ArrayBuffer | null, accessToken: string) {
         const role = await AuthService.getUserRole(accessToken);
-        if (role !== UserRoles.ADMIN) {
+        if (role !== UserRoles.ADMIN && role !== UserRoles.USER) {
             throw new AuthorizationError();
         }
 
         if (!entity.id) throw new TrashcanNotFoundError();
         if (!validateTrashcan(entity)) throw new InvalidEntityError();
-        const image = file ? FileService.create(file) : IMAGES.NONE;
-        const trashcan = await TrashcanDAO.findByIdAndUpdate(entity.id, { ...entity, image }, { new: true });
+        const image = file ? FileService.create(file) : undefined;
+        const trashcan = await TrashcanDAO.findByIdAndUpdate(
+            entity.id,
+            role === UserRoles.ADMIN ? { ...entity, image } : { fill: entity.fill },
+            { new: true }
+        );
         if (trashcan) return trashcan;
         throw new TrashcanNotFoundError();
     }

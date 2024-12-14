@@ -9,6 +9,8 @@ import { AuthorizationError } from '@/error/authorizationError';
 import { UserResponse } from '@/dto/user/response';
 import { UserRoles } from '@/types/userRoles';
 import { InvalidTokenError } from '@/error/invalidTokenError';
+import { LIMITS } from '@/constants/limits';
+import { validateRange } from '@/utils/validators';
 
 class AuthService {
     async signUp(user: Readonly<UserRequest>): Promise<void> {
@@ -16,7 +18,12 @@ class AuthService {
             login: { $eq: user.login },
         });
 
-        if (currentUser) {
+        if (
+            currentUser ||
+            user.password.length !== LIMITS.PASSWORD_LENGTH ||
+            !validateRange(user.login.length, LIMITS.LOGIN_MIN, LIMITS.LOGIN_MAX) ||
+            user.login.includes(' ')
+        ) {
             throw new AuthorizationError();
         }
 
